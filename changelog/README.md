@@ -4,6 +4,8 @@
 
 ### 4.6.0 (in progress)
 
+- [improvement] JAVA-2301: Introduce OSGi tests for the mapper
+- [improvement] JAVA-2658: Refactor OSGi tests
 - [bug] JAVA-2657: Add ability to specify the class loader to use for application-specific classpath resources
 - [new feature] JAVA-2614: Provide a utility to emulate offset paging on the client side
 - [new feature] JAVA-2718: Warn when the number of sessions exceeds a configurable threshold
