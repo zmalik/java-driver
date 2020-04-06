@@ -59,4 +59,6 @@ public interface DaoReturnTypeKind {
 
   /** A short description suitable for error messages. */
   String getDescription();
+
+  boolean requiresReactive();
 }

@@ -72,6 +72,17 @@ public class DaoSelectMethodGenerator extends DaoMethodGenerator {
   }
 
   @Override
+  public boolean requiresReactive() {
+    // Validate the return type:
+    DaoReturnType returnType =
+        parseAndValidateReturnType(getSupportedReturnTypes(), Select.class.getSimpleName());
+    if (returnType == null) {
+      return false;
+    }
+    return returnType.requiresReactive();
+  }
+
+  @Override
   public Optional<MethodSpec> generate() {
 
     // Validate the return type:
@@ -80,6 +91,7 @@ public class DaoSelectMethodGenerator extends DaoMethodGenerator {
     if (returnType == null) {
       return Optional.empty();
     }
+
     TypeElement entityElement = returnType.getEntityElement();
     EntityDefinition entityDefinition = context.getEntityFactory().getDefinition(entityElement);
 

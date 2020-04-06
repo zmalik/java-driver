@@ -67,4 +67,8 @@ public class DaoReturnType {
   public TypeElement getEntityElement() {
     return entityElement;
   }
+
+  public boolean requiresReactive() {
+    return kind.requiresReactive();
+  }
 }

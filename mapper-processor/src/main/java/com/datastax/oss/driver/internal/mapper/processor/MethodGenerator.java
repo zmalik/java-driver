@@ -27,4 +27,8 @@ public interface MethodGenerator {
    *     DecoratedMessager}.
    */
   Optional<MethodSpec> generate();
+
+  default boolean requiresReactive() {
+    return false;
+  }
 }
