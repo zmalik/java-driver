@@ -99,7 +99,7 @@ public class ContinuousGraphRequestHandler
   @NonNull
   @Override
   protected Duration getPageTimeout(int pageNumber) {
-    return Duration.ZERO;
+    return this.globalTimeout;
   }
 
   @NonNull
