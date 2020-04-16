@@ -66,7 +66,6 @@ public class ProfileIT {
 
   private static ProfileIT.SimpleDao daoString;
   private static ProfileIT.SimpleDao daoClass;
-  private static CqlSession mapperSession;
 
   @BeforeClass
   public static void setupClass() {
@@ -81,12 +80,20 @@ public class ProfileIT {
             .startProfile("cl")
             .withString(DefaultDriverOption.REQUEST_CONSISTENCY, "ANY")
             .build();
-    mapperSession = SessionUtils.newSession(SIMULACRON_RULE, loader);
+    CqlSession session = SessionUtils.newSession(SIMULACRON_RULE, loader);
 
     ProfileIT.InventoryMapper inventoryMapper =
-        new ProfileIT_InventoryMapperBuilder(mapperSession).build();
+        new ProfileIT_InventoryMapperBuilder(session).build();
     daoString = inventoryMapper.simpleDao("cl");
-    DriverExecutionProfile clProfile = mapperSession.getContext().getConfig().getProfile("cl");
+
+    // Deliberately based on the default profile, so that we can assert that a dynamically-set
+    // option is correctly taken into account
+    DriverExecutionProfile clProfile =
+        session
+            .getContext()
+            .getConfig()
+            .getDefaultProfile()
+            .withString(DefaultDriverOption.REQUEST_CONSISTENCY, "ANY");
     daoClass = inventoryMapper.simpleDao(clProfile);
   }
 
