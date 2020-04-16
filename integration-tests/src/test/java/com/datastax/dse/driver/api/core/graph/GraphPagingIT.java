@@ -487,7 +487,7 @@ public class GraphPagingIT {
       secondPageFuture.toCompletableFuture().get();
       fail("Expecting DriverTimeoutException");
     } catch (ExecutionException e) {
-      assertThat(e.getCause()).hasMessage("Timed out waiting for page 2");
+      assertThat(e.getCause()).hasMessage("Query timed out after " + timeout);
     } finally {
       CCM_RULE.getCcmBridge().resume(1);
     }
