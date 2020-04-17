@@ -30,7 +30,7 @@ import java.lang.annotation.Target;
  * <pre>
  *  * &#64;Mapper
  *  * public interface InventoryMapper {
- *  *   ProductDao productDao(@DaoTable String executionProfile);
+ *  *   ProductDao productDao(@DaoProfile String executionProfile);
  *  * }
  *  * </pre>
  *
