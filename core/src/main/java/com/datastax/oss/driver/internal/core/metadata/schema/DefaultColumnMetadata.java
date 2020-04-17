@@ -19,7 +19,6 @@ import com.datastax.oss.driver.api.core.CqlIdentifier;
 import com.datastax.oss.driver.api.core.metadata.schema.ColumnMetadata;
 import com.datastax.oss.driver.api.core.type.DataType;
 import edu.umd.cs.findbugs.annotations.NonNull;
-
 import java.io.Serializable;
 import java.util.Objects;
 import net.jcip.annotations.Immutable;

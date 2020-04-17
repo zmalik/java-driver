@@ -22,7 +22,6 @@ import com.datastax.oss.driver.api.core.type.DataType;
 import com.datastax.oss.driver.api.core.type.codec.TypeCodec;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
-
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.Optional;
@@ -42,7 +41,7 @@ public class DefaultAggregateMetadata implements AggregateMetadata, Serializable
   @NonNull private final DataType returnType;
   @NonNull private final FunctionSignature stateFuncSignature;
   @NonNull private final DataType stateType;
-  @NonNull private transient final TypeCodec<Object> stateTypeCodec;
+  @NonNull private final transient TypeCodec<Object> stateTypeCodec;
 
   public DefaultAggregateMetadata(
       @NonNull CqlIdentifier keyspace,

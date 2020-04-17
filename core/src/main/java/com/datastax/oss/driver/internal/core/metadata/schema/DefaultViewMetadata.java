@@ -23,7 +23,6 @@ import com.datastax.oss.driver.shaded.guava.common.collect.ImmutableList;
 import com.datastax.oss.driver.shaded.guava.common.collect.ImmutableMap;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
-
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;

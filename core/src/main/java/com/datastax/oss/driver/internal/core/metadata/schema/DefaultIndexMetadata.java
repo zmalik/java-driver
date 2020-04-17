@@ -19,7 +19,6 @@ import com.datastax.oss.driver.api.core.CqlIdentifier;
 import com.datastax.oss.driver.api.core.metadata.schema.IndexKind;
 import com.datastax.oss.driver.api.core.metadata.schema.IndexMetadata;
 import edu.umd.cs.findbugs.annotations.NonNull;
-
 import java.io.Serializable;
 import java.util.Map;
 import java.util.Objects;
