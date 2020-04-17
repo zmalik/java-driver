@@ -43,20 +43,6 @@ public class DefaultMapperContext implements MapperContext {
   public DefaultMapperContext(
       @NonNull CqlSession session,
       @Nullable CqlIdentifier keyspaceId,
-      @NonNull Map<Object, Object> customState) {
-    this(
-        session,
-        keyspaceId,
-        null,
-        null,
-        null,
-        new ConcurrentHashMap<>(),
-        NullAllowingImmutableMap.copyOf(customState));
-  }
-
-  public DefaultMapperContext(
-      @NonNull CqlSession session,
-      @Nullable CqlIdentifier keyspaceId,
       @Nullable String executionProfileName,
       @Nullable DriverExecutionProfile executionProfile,
       @NonNull Map<Object, Object> customState) {
@@ -70,11 +56,6 @@ public class DefaultMapperContext implements MapperContext {
         NullAllowingImmutableMap.copyOf(customState));
   }
 
-  public DefaultMapperContext(
-      @NonNull CqlSession session, @NonNull Map<Object, Object> customState) {
-    this(session, null, customState);
-  }
-
   private DefaultMapperContext(
       CqlSession session,
       CqlIdentifier keyspaceId,
@@ -83,6 +64,10 @@ public class DefaultMapperContext implements MapperContext {
       DriverExecutionProfile executionProfile,
       ConcurrentMap<Class<? extends NameConverter>, NameConverter> nameConverterCache,
       Map<Object, Object> customState) {
+    if (executionProfile != null && executionProfileName != null) {
+      // the mapper code prevents this, so we should never get here
+      throw new IllegalArgumentException("Can't provide both a profile and a name");
+    }
     this.session = session;
     this.keyspaceId = keyspaceId;
     this.tableId = tableId;

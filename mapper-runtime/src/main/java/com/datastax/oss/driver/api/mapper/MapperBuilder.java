@@ -17,6 +17,7 @@ package com.datastax.oss.driver.api.mapper;
 
 import com.datastax.oss.driver.api.core.CqlIdentifier;
 import com.datastax.oss.driver.api.core.CqlSession;
+import com.datastax.oss.driver.api.core.config.DriverExecutionProfile;
 import com.datastax.oss.driver.api.mapper.annotations.DaoFactory;
 import com.datastax.oss.driver.api.mapper.annotations.Mapper;
 import com.datastax.oss.driver.api.mapper.annotations.QueryProvider;
@@ -38,6 +39,8 @@ public abstract class MapperBuilder<MapperT> {
   protected final CqlSession session;
   protected CqlIdentifier defaultKeyspaceId;
   protected Map<Object, Object> customState;
+  protected String defaultExecutionProfileName;
+  protected DriverExecutionProfile defaultExecutionProfile;
 
   protected MapperBuilder(CqlSession session) {
     this.session = session;
@@ -93,6 +96,47 @@ public abstract class MapperBuilder<MapperT> {
   @NonNull
   public MapperBuilder<MapperT> withDefaultKeyspace(@Nullable String keyspaceName) {
     return withDefaultKeyspace(keyspaceName == null ? null : CqlIdentifier.fromCql(keyspaceName));
+  }
+
+  /**
+   * Specifies a default execution profile name that will be used for all DAOs built with this
+   * mapper (unless they specify their own execution profile).
+   *
+   * <p>This works the same way as the {@linkplain #withDefaultKeyspace(CqlIdentifier) default
+   * keyspace}.
+   *
+   * @throws IllegalStateException if you've already set a profile with #withDefaultExecutionProfile
+   * @see DaoFactory
+   */
+  @NonNull
+  public MapperBuilder<MapperT> withDefaultExecutionProfileName(
+      @Nullable String executionProfileName) {
+    if (executionProfileName != null && defaultExecutionProfile != null) {
+      throw new IllegalStateException("Can't set both executionProfile and executionProfileName");
+    }
+    this.defaultExecutionProfileName = executionProfileName;
+    return this;
+  }
+
+  /**
+   * Specifies a default execution profile name that will be used for all DAOs built with this
+   * mapper (unless they specify their own execution profile).
+   *
+   * <p>This works the same way as the {@linkplain #withDefaultKeyspace(CqlIdentifier) default
+   * keyspace}.
+   *
+   * @throws IllegalStateException if you've already set a profile name with
+   *     #withDefaultExecutionProfileName
+   * @see DaoFactory
+   */
+  @NonNull
+  public MapperBuilder<MapperT> withDefaultExecutionProfile(
+      @Nullable DriverExecutionProfile executionProfile) {
+    if (executionProfile != null && defaultExecutionProfileName != null) {
+      throw new IllegalStateException("Can't set both executionProfile and executionProfileName");
+    }
+    this.defaultExecutionProfile = executionProfile;
+    return this;
   }
 
   /**

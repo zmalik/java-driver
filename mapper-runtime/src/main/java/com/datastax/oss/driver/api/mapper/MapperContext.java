@@ -49,6 +49,9 @@ public interface MapperContext {
   /**
    * If this context belongs to a DAO that was built with a method that takes an execution profile
    * name as parameter, the value of that parameter. Otherwise null.
+   *
+   * <p>Note that this is mutually exclusive with {@link #getExecutionProfile()}: at most one of the
+   * two methods returns a non-null value (or both return null if no profile was provided).
    */
   @Nullable
   String getExecutionProfileName();
@@ -56,6 +59,9 @@ public interface MapperContext {
   /**
    * If this context belongs to a DAO that was built with a method that takes an execution profile
    * as parameter, the value of that parameter. Otherwise null.
+   *
+   * <p>Note that this is mutually exclusive with {@link #getExecutionProfileName()}: at most one of
+   * the two methods returns a non-null value (or both return null if no profile was provided).
    */
   @Nullable
   DriverExecutionProfile getExecutionProfile();

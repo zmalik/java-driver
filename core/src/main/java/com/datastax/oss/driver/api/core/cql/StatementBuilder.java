@@ -91,6 +91,7 @@ public abstract class StatementBuilder<
   @NonNull
   public SelfT setExecutionProfileName(@Nullable String executionProfileName) {
     this.executionProfileName = executionProfileName;
+    this.executionProfile = null;
     return self;
   }
 
