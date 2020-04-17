@@ -260,7 +260,7 @@ public abstract class AbstractTableMetadata {
     if (!clusteringOrder.isEmpty()) and(appendClusteringOrder(sb), formatted);
     if (cassandraVersion.getMajor() < 4)
       sb.append("read_repair_chance = ").append(options.getReadRepairChance());
-    else sb.append("read_repair = 'BLOCKING'");
+    else sb.append("read_repair = '").append(options.getReadRepair()).append('\'');
     if (cassandraVersion.getMajor() < 4)
       and(sb, formatted)
           .append("dclocal_read_repair_chance = ")
@@ -270,7 +270,10 @@ public abstract class AbstractTableMetadata {
       and(sb, formatted).append("replicate_on_write = ").append(options.getReplicateOnWrite());
     and(sb, formatted).append("gc_grace_seconds = ").append(options.getGcGraceInSeconds());
     if (cassandraVersion.getMajor() > 3)
-      and(sb, formatted).append("additional_write_policy = '99p'");
+      and(sb, formatted)
+          .append("additional_write_policy = '")
+          .append(options.getAdditionalWritePolicy())
+          .append('\'');
     and(sb, formatted)
         .append("bloom_filter_fp_chance = ")
         .append(options.getBloomFilterFalsePositiveChance());
