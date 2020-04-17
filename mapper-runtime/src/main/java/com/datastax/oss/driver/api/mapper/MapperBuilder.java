@@ -105,16 +105,18 @@ public abstract class MapperBuilder<MapperT> {
    * <p>This works the same way as the {@linkplain #withDefaultKeyspace(CqlIdentifier) default
    * keyspace}.
    *
-   * @throws IllegalStateException if you've already set a profile with #withDefaultExecutionProfile
+   * <p>Note that if you had already set a profile with #withDefaultExecutionProfile, this method
+   * erases it.
+   *
    * @see DaoFactory
    */
   @NonNull
   public MapperBuilder<MapperT> withDefaultExecutionProfileName(
       @Nullable String executionProfileName) {
-    if (executionProfileName != null && defaultExecutionProfile != null) {
-      throw new IllegalStateException("Can't set both executionProfile and executionProfileName");
-    }
     this.defaultExecutionProfileName = executionProfileName;
+    if (executionProfileName != null) {
+      this.defaultExecutionProfile = null;
+    }
     return this;
   }
 
@@ -125,17 +127,18 @@ public abstract class MapperBuilder<MapperT> {
    * <p>This works the same way as the {@linkplain #withDefaultKeyspace(CqlIdentifier) default
    * keyspace}.
    *
-   * @throws IllegalStateException if you've already set a profile name with
-   *     #withDefaultExecutionProfileName
+   * <p>Note that if you had already set a profile name with #withDefaultExecutionProfileName, this
+   * method erases it.
+   *
    * @see DaoFactory
    */
   @NonNull
   public MapperBuilder<MapperT> withDefaultExecutionProfile(
       @Nullable DriverExecutionProfile executionProfile) {
-    if (executionProfile != null && defaultExecutionProfileName != null) {
-      throw new IllegalStateException("Can't set both executionProfile and executionProfileName");
-    }
     this.defaultExecutionProfile = executionProfile;
+    if (executionProfile != null) {
+      this.defaultExecutionProfileName = null;
+    }
     return this;
   }
 

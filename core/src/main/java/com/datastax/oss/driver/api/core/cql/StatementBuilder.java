@@ -91,7 +91,9 @@ public abstract class StatementBuilder<
   @NonNull
   public SelfT setExecutionProfileName(@Nullable String executionProfileName) {
     this.executionProfileName = executionProfileName;
-    this.executionProfile = null;
+    if (executionProfileName != null) {
+      this.executionProfile = null;
+    }
     return self;
   }
 
@@ -99,7 +101,9 @@ public abstract class StatementBuilder<
   @NonNull
   public SelfT setExecutionProfile(@Nullable DriverExecutionProfile executionProfile) {
     this.executionProfile = executionProfile;
-    this.executionProfileName = null;
+    if (executionProfile != null) {
+      this.executionProfileName = null;
+    }
     return self;
   }
 
