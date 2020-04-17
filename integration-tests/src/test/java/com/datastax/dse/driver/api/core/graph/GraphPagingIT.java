@@ -69,9 +69,6 @@ public class GraphPagingIT {
                   .withStringList(
                       DefaultDriverOption.METRICS_NODE_ENABLED,
                       Collections.singletonList(DseNodeMetric.GRAPH_MESSAGES.getPath()))
-                  // Increase heartbeat interval to avoid interferences since we pause/stop the
-                  // server in this test
-                  .withDuration(DefaultDriverOption.HEARTBEAT_INTERVAL, Duration.ofMinutes(10))
                   .build())
           .build();
 
