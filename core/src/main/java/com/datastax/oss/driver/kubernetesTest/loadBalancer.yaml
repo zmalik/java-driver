@@ -1,0 +1,10 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: load-balancer
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 9042
+  selector:
+    name: cassandra
