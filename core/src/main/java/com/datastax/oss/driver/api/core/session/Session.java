@@ -16,6 +16,7 @@
 package com.datastax.oss.driver.api.core.session;
 
 import com.datastax.oss.driver.api.core.AsyncAutoCloseable;
+import com.datastax.oss.driver.api.core.ConsistencyLevel;
 import com.datastax.oss.driver.api.core.CqlIdentifier;
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.CqlSessionBuilder;
@@ -25,9 +26,12 @@ import com.datastax.oss.driver.api.core.context.DriverContext;
 import com.datastax.oss.driver.api.core.metadata.Metadata;
 import com.datastax.oss.driver.api.core.metadata.Node;
 import com.datastax.oss.driver.api.core.metadata.NodeState;
+import com.datastax.oss.driver.api.core.metadata.diagnostic.SessionDiagnostic;
+import com.datastax.oss.driver.api.core.metadata.schema.KeyspaceMetadata;
 import com.datastax.oss.driver.api.core.metrics.Metrics;
 import com.datastax.oss.driver.api.core.type.reflect.GenericType;
 import com.datastax.oss.driver.internal.core.DefaultMavenCoordinates;
+import com.datastax.oss.driver.internal.core.metadata.diagnostic.SessionDiagnosticGenerator;
 import com.datastax.oss.driver.internal.core.util.concurrent.BlockingOperation;
 import com.datastax.oss.driver.internal.core.util.concurrent.CompletableFutures;
 import edu.umd.cs.findbugs.annotations.NonNull;
@@ -202,6 +206,44 @@ public interface Session extends AsyncAutoCloseable {
    */
   @NonNull
   Optional<Metrics> getMetrics();
+
+  /**
+   * Returns a health diagnostic for this session. See the javadocs of {@link SessionDiagnostic} for
+   * a detailed explanation on the contents of a diagnostic.
+   *
+   * <p>This method will use the {@linkplain #getKeyspace() session's keyspace}, as well as the
+   * consistency level and local datacenter defined in the configuration, to perform token range
+   * diagnostics. If the session is not bound to any keyspace, or if no datacenter can be found in
+   * the configuration, the token range diagnostics will not be produced.
+   *
+   * <p>To generate diagnostics for a different keyspace, consistency level or datacenter, use
+   * {@link #generateDiagnostic(KeyspaceMetadata, ConsistencyLevel, String)} instead.
+   *
+   * <p>Note: diagnostics rely on Gossip events received by the driver. But Gossip events are not
+   * 100% reliable, and therefore, the accuracy of reported health statuses should be considered
+   * best-effort only, and are not meant to replace a proper operational surveillance tool.
+   */
+  default SessionDiagnostic generateDiagnostic() {
+    return new SessionDiagnosticGenerator(this).generate();
+  }
+
+  /**
+   * Returns a health diagnostic for this session. See the javadocs of {@link SessionDiagnostic} for
+   * a detailed explanation on the contents of a diagnostic.
+   *
+   * <p>This method will use the provided keyspace, consistency level and datacenter to perform
+   * token range diagnostics.
+   *
+   * <p>Note: diagnostics rely on Gossip events received by the driver. But Gossip events are not
+   * 100% reliable, and therefore, the accuracy of reported health statuses should be considered
+   * best-effort only, and are not meant to replace a proper operational surveillance tool.
+   */
+  default SessionDiagnostic generateDiagnostic(
+      @NonNull KeyspaceMetadata keyspace,
+      @NonNull ConsistencyLevel consistencyLevel,
+      @Nullable String datacenter) {
+    return new SessionDiagnosticGenerator(this).generate(keyspace, consistencyLevel, datacenter);
+  }
 
   /**
    * Executes an arbitrary request.
